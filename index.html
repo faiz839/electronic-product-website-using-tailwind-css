@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Navbar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/alpinejs" defer></script>
+</head>
+<body class="bg-gray-100">
+
+  <nav class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <!-- Logo -->
+        <div class="flex-shrink-0 flex items-center">
+          <a href="#" class="text-xl font-bold text-blue-600">MyLogo</a>
+        </div>
+
+        <!-- Desktop Nav Links -->
+        <div class="hidden md:flex md:items-center space-x-4">
+          <a href="#" class="text-gray-700  hover:bg-green-600 px-3 py-2 rounded transition duration-300">Home</a>
+          <a href="#" class="text-gray-700  hover:bg-green-600 px-3 py-2 rounded transition duration-300">About</a>
+          <a href="#" class="text-gray-700  hover:bg-green-600 px-3 py-2 rounded transition duration-300">Services</a>
+          <a href="#" class="text-gray-700  hover:bg-green-600 px-3 py-2 rounded transition duration-300">Contact</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden flex items-center">
+          <button @click="open = !open" class="text-gray-700 focus:outline-none" x-data="{ open: false }">
+            <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M6 18L18 6M6 6l12 12" />
+            </svg>
+
+            <!-- Mobile Nav Menu -->
+            <div x-show="open" class="absolute top-16 left-0 w-full bg-white shadow-md z-10">
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Home</a>
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">About</a>
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Services</a>
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Contact</a>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <body class="bg-gray-100">
+
+    <div class="relative w-full max-w-screen-xl mx-auto mt-10 overflow-hidden" x-data="carousel()" x-init="init()">
+      <!-- Slides -->
+      <div class="relative h-[350px] overflow-hidden rounded-lg">
+        <template x-for="(slide, index) in slides" :key="index">
+          <div x-show="currentIndex === index" x-transition class="absolute inset-0">
+            <img :src="slide.src" :alt="slide.alt" class="w-full h-full object-cover">
+            <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-4 hidden md:block">
+              <h5 class="text-xl font-bold" x-text="slide.title"></h5>
+              <p class="text-sm" x-text="slide.text"></p>
+            </div>
+          </div>
+        </template>
+      </div>
+    
+      <!-- Controls -->
+      <button @click="prev()" class="absolute top-1/2 left-0 transform -translate-y-1/2 px-4 py-2 bg-black/40 text-white hover:bg-black/60">
+        &#10094;
+      </button>
+      <button @click="next()" class="absolute top-1/2 right-0 transform -translate-y-1/2 px-4 py-2 bg-black/40 text-white hover:bg-black/60">
+        &#10095;
+      </button>
+    
+      <!-- Indicators -->
+      <div class="flex justify-center mt-4 space-x-2">
+        <template x-for="(slide, index) in slides" :key="index">
+          <button @click="goToSlide(index)"
+                  class="w-3 h-3 rounded-full"
+                  :class="currentIndex === index ? 'bg-blue-600' : 'bg-gray-300'"></button>
+        </template>
+      </div>
+    </div>
+    
+    <script>
+      function carousel() {
+        return {
+          currentIndex: 0,
+          slides: [
+            {
+              src: 'https://rukminim1.flixcart.com/fk-p-flap/1620/270/image/d9290fb51138d286.png?q=20',
+              alt: 'First Slide',
+              title: 'First slide label',
+              text: 'Some representative placeholder content for the first slide.',
+            },
+            {
+              src: 'https://rukminim1.flixcart.com/fk-p-flap/1620/270/image/7ba5649b8d3f6f1a.jpg?q=20',
+              alt: 'Second Slide',
+              title: 'Second slide label',
+              text: 'Some representative placeholder content for the second slide.',
+            },
+            {
+              src: 'https://rukminim1.flixcart.com/fk-p-flap/1620/270/image/3db48f3341053283.jpg?q=20',
+              alt: 'Third Slide',
+              title: 'Third slide label',
+              text: 'Some representative placeholder content for the third slide.',
+            }
+          ],
+          init() {
+            setInterval(() => {
+              this.next();
+            }, 5000); // Auto-slide every 5 seconds
+          },
+          prev() {
+            this.currentIndex = (this.currentIndex === 0) ? this.slides.length - 1 : this.currentIndex - 1;
+          },
+          next() {
+            this.currentIndex = (this.currentIndex === this.slides.length - 1) ? 0 : this.currentIndex + 1;
+          },
+          goToSlide(index) {
+            this.currentIndex = index;
+          }
+        }
+      }
+    </script>
+
+<body class="bg-gray-100 text-gray-800">
+    
+
+  <!-- Best of Electronics -->
+  <h4 class="text-center text-2xl font-semibold mt-10 mb-6">Best of Electronics</h4>
+  <div class="flex flex-wrap justify-center gap-6 px-4">
+    <!-- Card 1 -->
+    <div class="max-w-xs bg-white rounded-lg shadow-md overflow-hidden  hover:shadow-lg hover:scale-105 transform transition duration-300">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjLQSUlcHpNjp_qE5VcVpauWOKBSj8UUboqUeFcVnR9ekNLwvqGMSZrY91SC7mme0RC60&usqp=CAU" class="w-full h-[250px] object-cover">
+      <div class="p-4">
+        <h5 class="text-lg font-semibold">Best true wireless headphones</h5>
+        <p class="text-sm text-gray-600 mb-3">boat, OnePlus & more</p>
+        <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Shop Now</a>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="max-w-xs bg-white rounded-lg shadow-md overflow-hidden  hover:shadow-lg hover:scale-105 transform transition duration-300">
+      <img src="https://rukminim2.flixcart.com/image/200/200/kcf4lu80/speaker/mobile-tablet-speaker/h/u/f/srs-xb23-sony-original-imaftk66vjxp86h5.jpeg?q=70" class="w-full h-[250px] object-cover">
+      <div class="p-4">
+        <h5 class="text-lg font-semibold">Best Selling Mobile Speaker</h5>
+        <p class="text-sm text-gray-600 mb-3">From ₹499, Sony, boat & more</p>
+        <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Shop Now</a>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="max-w-xs bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg hover:scale-105 transform transition duration-300">
+      <img src="https://rukminim2.flixcart.com/image/200/200/xif0q/smartwatch/5/v/s/-original-imagxrhetgfuebnn.jpeg?q=70" class="w-full h-[250px] object-cover">
+      <div class="p-4">
+        <h5 class="text-lg font-semibold">Fast Track Smart Watches</h5>
+        <p class="text-sm text-gray-600 mb-3">Top Offers / Bluetooth calling</p>
+        <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Shop Now</a>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="max-w-xs bg-white rounded-lg shadow-md overflow-hidden  hover:shadow-lg hover:scale-105 transform transition duration-300">
+      <img src="https://rukminim2.flixcart.com/image/200/200/l4x2rgw0/monitor/n/y/y/q24i-20-full-hd-23-8-66eegac3in-lenovo-original-imagfpgxzsk8ef26.jpeg?q=70" class="w-full h-[250px] object-cover">
+      <div class="p-4">
+        <h5 class="text-lg font-semibold">Monitors</h5>
+        <p class="text-sm text-gray-600 mb-3">Lenovo</p>
+        <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Shop Now</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Best Phones -->
+  <h3 class="text-center text-2xl font-semibold mt-12 mb-6">Best Phones</h3>
+  <div class="flex flex-wrap justify-center gap-6 px-4">
+    <!-- Phone cards -->
+    <div class="max-w-xs bg-white rounded-lg shadow-md overflow-hidden  hover:shadow-lg hover:scale-105 transform transition duration-300">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRksdcPw_h9ODjw5k7a_OMfG3UKHo6BCv44nfHaPsFRhPYHBT8e3j66QMaXEL4AHVTjRgw&usqp=CAU" class="w-full h-[250px] object-cover">
+      <div class="p-4">
+        <h5 class="text-lg font-semibold">iPhone</h5>
+        <p class="text-sm text-gray-600 mb-3">Definition, History, & Facts | Britannica</p>
+        <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Shop Now</a>
+      </div>
+    </div>
+
+    <div class="max-w-xs bg-white rounded-lg shadow-md overflow-hidden  hover:shadow-lg hover:scale-105 transform transition duration-300">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSRRBVmE0mNTBIsB49SskmXK3YOX62GDbUIMAEQ6lTlcZcUpSZXLPz-Njl_rZFVLi6tEs&usqp=CAU" class="w-full h-[250px] object-cover">
+      <div class="p-4">
+        <h5 class="text-lg font-semibold">TV</h5>
+        <p class="text-sm text-gray-600 mb-3">Buy 43 Inch Full HD Smart TV (Samsung)</p>
+        <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Shop Now</a>
+      </div>
+    </div>
+
+    <div class="max-w-xs bg-white rounded-lg shadow-md overflow-hidden  hover:shadow-lg hover:scale-105 transform transition duration-300">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXIF8du1Sq8U0eSGUNzrqpZvjAcIglTKsE8IBYEpjzGUHjAlgezNO2w3ATm797UAAkIgw&usqp=CAU" class="w-full h-[250px] object-cover">
+      <div class="p-4">
+        <h5 class="text-lg font-semibold">OnePlus</h5>
+        <p class="text-sm text-gray-600 mb-3">Nord CE 2 Lite 5G - Blue Tide</p>
+        <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Shop Now</a>
+      </div>
+    </div>
+
+    <div class="max-w-xs bg-white rounded-lg shadow-md overflow-hidden  hover:shadow-lg hover:scale-105 transform transition duration-300">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLRN5nYlWnOmlNVsNH3tVM0Dn4prR9PC9L_jnFOt5sI7cTuxnfLeuF6ss27XO6wcVp1PQ&usqp=CAU" class="w-full h-[250px] object-cover">
+      <div class="p-4">
+        <h5 class="text-lg font-semibold">Oppo</h5>
+        <p class="text-sm text-gray-600 mb-3">Latest Smartphone Models | OPPO India</p>
+        <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Shop Now</a>
+      </div>
+    </div>
+</div>
+
+
+<h3 class="text-center text-2xl font-semibold mt-12 mb-6">Best Laptops</h3>
+
+<div class="flex flex-wrap justify-center gap-4 px-4">
+  <!-- HP Laptop Card -->
+  <div class="max-w-xs bg-white rounded-lg shadow-md overflow-hidden  hover:shadow-lg hover:scale-105 transform transition duration-300">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-ZBieYyTMtMy-5133INbiS9U8c75aL44MywOh_kzNxGDZ2ohKLcLW7TlahjeVr5V7VgI&usqp=CAU"
+         alt="HP Laptop" class="w-full h-[250px] object-cover">
+    <div class="p-4">
+      <h5 class="text-lg font-semibold">HP</h5>
+      <p class="text-sm text-gray-600 mb-3">HP Victus 15.6" Gaming Laptop 15-fb0050AX, Silver</p>
+      <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+        Shop Now
+      </a>
+    </div>
+  </div>
+
+  <!-- Dell Laptop Card -->
+  <div class="max-w-xs bg-white rounded-lg shadow-md overflow-hidden  hover:shadow-lg hover:scale-105 transform transition duration-300">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRVTaIXpvg5mO5oQ0vBkq2pqNTSB8mKzsnYpGUFw2UIohNTic-BxoSfl_qPHQ0gWRu9o0&usqp=CAU"
+         alt="Dell Laptop" class="w-full h-[250px] object-cover">
+    <div class="p-4">
+      <h5 class="text-lg font-semibold">Dell</h5>
+      <p class="text-sm text-gray-600 mb-3">Intel Core i3 11th Gen, 8GB RAM / 256GB SSD</p>
+      <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+        Shop Now
+      </a>
+    </div>
+  </div>
+
+  <!-- ASUS Laptop Card -->
+  <div class="max-w-xs bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg hover:scale-105 transform transition duration-300">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8vkMZQkfkLOYqEl4DEV2RfuSC6eObzYb3h-5xo3egLSBOrP--ZhaiiVjcOflOQeeC5dE&usqp=CAU"
+         alt="ASUS Laptop" class="w-full h-[250px] object-cover">
+    <div class="p-4">
+      <h5 class="text-lg font-semibold">ASUS</h5>
+      <p class="text-sm text-gray-600 mb-3">L510 MA-DB02 Ultra Thin, 15.6” FHD, Intel</p>
+      <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+        Shop Now
+      </a>
+    </div>
+  </div>
+
+  <!-- Apple Laptop Card -->
+  <div class="max-w-xs bg-white rounded-lg shadow-md overflow-hidden  hover:shadow-lg hover:scale-105 transform transition duration-300">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaIZJGR4dt2CD9MXDfesmPaIemKyD0IoAKqKOia7N-tOTnUuoZSSwDx3t8jjKid4eBPoM&usqp=CAU"
+         alt="Apple MacBook" class="w-full h-[250px] object-cover">
+    <div class="p-4">
+      <h5 class="text-lg font-semibold">Apple</h5>
+      <p class="text-sm text-gray-600 mb-3">16-inch MacBook Pro — The world's best pro laptop</p>
+      <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+        Shop Now
+      </a>
+    </div>
+  </div>
+</div>
+<!-- form -->
+<h1 class="text-center text-3xl font-bold mt-10 ">Contact Us!</h1>
+
+<div class="flex justify-center mt-6 hover:shadow-lg hover:scale-105 transform transition duration-300">
+  <form class="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
+    <div class="mb-4">
+      <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+      <input
+        type="email"
+        id="email"
+        class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        aria-describedby="emailHelp"
+      />
+      <p id="emailHelp" class="text-xs text-gray-500 mt-1">We'll never share your email with anyone else.</p>
+    </div>
+
+    <div class="mb-4">
+      <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+      <input
+        type="password"
+        id="password"
+        class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <div class="mb-4 flex items-center">
+      <input type="checkbox" id="check" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+      <label for="check" class="ml-2 block text-sm text-gray-700">Check me out</label>
+    </div>
+
+    <button
+      type="submit"
+      class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition duration-200"
+    >
+      Submit
+    </button>
+  </form>
+</div>
+<!-- footer -->
+<footer class="bg-gray-100 text-gray-700">
+    <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- Contact Info -->
+      <div class="space-y-2">
+        <h3 class="text-lg font-semibold mb-2">Contact Us</h3>
+        <p><span class="font-medium">Email:</span> info@example.com</p>
+        <p><span class="font-medium">Phone:</span> +121 56556 565556</p>
+        <p><span class="font-medium">Address:</span> Your Address, 123 Street</p>
+      </div>
+  
+      <!-- Quick Links -->
+      <div>
+        <h3 class="text-lg font-semibold mb-2">Quick Links</h3>
+        <ul class="space-y-1">
+          <li><a href="#" class="hover:underline text-gray-600">Home</a></li>
+          <li><a href="#" class="hover:underline text-gray-600">About</a></li>
+          <li><a href="#" class="hover:underline text-gray-600">Services</a></li>
+          <li><a href="#" class="hover:underline text-gray-600">Products</a></li>
+          <li><a href="#" class="hover:underline text-gray-600">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  
+    <!-- Bottom Bar -->
+    <div class="bg-gray-200 text-center py-4">
+      <p class="text-sm">&copy; 2023 Your Company. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
